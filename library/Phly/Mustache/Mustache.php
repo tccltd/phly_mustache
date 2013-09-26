@@ -234,7 +234,9 @@ class Mustache
     public function tokenize($template, $cacheTokens = true)
     {
         $lexer = $this->getLexer();
-        if (false !== strstr($template, '{{')) {
+        // MJT: Better way to detect a template string!!
+        if (true) { //false !== strstr($template, '{{')) {
+//        if (false !== strstr($template, '{{')) {
             return $lexer->compile($template);
         }
 

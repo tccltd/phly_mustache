@@ -106,7 +106,7 @@ class Renderer
                 case Lexer::TOKEN_VARIABLE:
                     $value = $this->getValue($data, $view);
                     if (is_scalar($value)) {
-                        $value = ('' === $value) ? '' : $this->escape($value);
+//                        $value = ('' === $value) ? '' : $this->escape($value);
                     } else {
                         $pragmaView = array($data => $value);
                         if ($test = $this->handlePragmas($type, $data, $pragmaView)) {
@@ -169,6 +169,7 @@ class Renderer
                     } elseif (is_object($section)) {
                         // In this case, the child object is the view.
                         $sectionView = $section;
+                        $sectionView->parent = $section;
                     } else {
                         // All other types, simply pass the current view
                         $sectionView = $view;
@@ -372,8 +373,10 @@ class Renderer
         }
 
         if (is_object($view)) {
-            if (method_exists($view, $key)) {
-                return call_user_func(array($view, $key));
+            if(is_callable(array($view, $key)) && ($callback = call_user_func(array($view, $key)))) {
+                return $callback;
+    //        if (method_exists($view, $key)) {
+//                return call_user_func(array($view, $key));
             } elseif (isset($view->$key)) {
                 return $view->$key;
             }
