@@ -95,7 +95,8 @@ class Renderer
         $rendered = '';
         foreach ($tokens as $token) {
             list($type, $data) = $token;
-            if ($value = $this->handlePragmas($type, $data, $view)) {
+            $value = $this->handlePragmas($type, $data, $view);
+            if (isset($value)) {
                 $rendered .= $value;
                 continue;
             }
@@ -485,7 +486,8 @@ class Renderer
         foreach ($this->invokedPragmas as $name => $options) {
             if (null !== ($handler = $this->getPragma($name))) {
                 if ($handler->handlesToken($token)) {
-                    if ($value = $handler->handle($token, $data, $view, $options)) {
+                    $value = $handler->handle($token, $data, $view, $options);
+                    if (isset($value)) {
                         return $value;
                     }
                 }
